@@ -12,18 +12,17 @@ class ConsoleHelper {
     }
 
     public void printAuthMenu() {
-        System.out.println("--------Welcome To Bank System---------");
+        ColorLogger.logInfo("--------Welcome To Bank System---------");
         System.out.println("1. Login");
         System.out.println("2. Register");
         System.out.println("3. Exit");
-        // String value =
         switch (sc.nextLine()) {
             case "1":
-                clearConsole();
+
                 this.printLogin();
                 break;
             case "2":
-                clearConsole();
+
                 this.printRegister();
             default:
                 break;
@@ -42,13 +41,12 @@ class ConsoleHelper {
         if (result.isPresent()) {
             User user = result.get();
 
-            System.out.println("Login successful! Welcome, " + user.getName() + ".");
+            ColorLogger.logSuccess("Login successful! Welcome, " + user.getName() + ".");
 
-            clearConsole();
             this.printMenu();
         } else {
-            System.out.println("Invalid Credentials");
-            clearConsole();
+
+            ColorLogger.logError("Invalid Credentials");
             this.printAuthMenu();
         }
 
@@ -63,7 +61,7 @@ class ConsoleHelper {
         String password = sc.nextLine();
 
         store.setUser(new User(name, email, password));
-        System.out.println("User Added Succesfully");
+        ColorLogger.logSuccess("User Added Succesfully");
 
         this.printAuthMenu();
     }
@@ -83,7 +81,6 @@ class ConsoleHelper {
         System.out.println("7. Exit");
 
         String value = sc.nextLine();
-        clearConsole();
 
         switch (value) {
             case "1":
@@ -93,8 +90,8 @@ class ConsoleHelper {
                     System.out.println("Enter your initial balance: ");
                     double balance = Double.parseDouble(sc.nextLine());
                     store.createBankAccount(accountNumber, balance);
-                    clearConsole();
-                    System.out.println("Account created successfully!");
+
+                    ColorLogger.logSuccess("Account created successfully!");
                 } else {
                     this.printAccountDetail(bankAccount.get().getAccountNumber());
                 }
@@ -108,10 +105,10 @@ class ConsoleHelper {
                     BankAccount account = bankAccount.get();
                     account.deposit(depositAmount);
                     store.updateBankAccount(account); // Update the bankAccounts list
-                    clearConsole();
+
                     System.out.println("Amount deposited successfully!");
                 } else {
-                    System.out.println("No bank account found.");
+                    ColorLogger.logError("Bank account not found.");
                 }
                 break;
 
@@ -122,7 +119,7 @@ class ConsoleHelper {
                 if (bankAccount.isPresent()) {
                     BankAccount account = bankAccount.get();
                     if (account.getBalance() < withdrawAmount)
-                        System.out.println("You dont have Enough balance!");
+                        ColorLogger.logWarning("You dont have Enough balance!");
 
                     else {
                         account.withdraw(withdrawAmount);
@@ -162,6 +159,10 @@ class ConsoleHelper {
                 break;
 
             case "5":
+                if (store.getBankAccount().isEmpty()) {
+                    System.out.println("Please Add New BankAccount!");
+                    break;
+                }
                 double balance = store.getBankAccount().get().getBalance();
                 System.out.println("Your current balance is: " + balance);
                 break;

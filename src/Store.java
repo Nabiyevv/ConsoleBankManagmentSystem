@@ -68,7 +68,7 @@ public final class Store {
 
     public void logout() {
         this.loggedUser = Optional.empty();
-        System.out.println("Logged out successfully");
+        ColorLogger.logSuccess("Logged out successfully");
     }
 
     public void createBankAccount(String accountNumber, double balance) {
